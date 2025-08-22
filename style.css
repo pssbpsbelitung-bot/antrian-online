@@ -1,0 +1,30 @@
+
+body {
+    background: #0f172a;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    margin-top: 50px;
+}
+.nomor {
+    font-size: 80px;
+    margin: 20px 0;
+    color: #38bdf8;
+}
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    background: #4ade80;
+    color: #000;
+    cursor: pointer;
+}
+.btn.reset {
+    background: #f87171;
+}

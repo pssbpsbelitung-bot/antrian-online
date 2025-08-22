@@ -1,0 +1,10 @@
+
+{
+  "name": "Antrian Online BPS",
+  "short_name": "AntrianBPS",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "description": "Aplikasi Antrian Online BPS Kabupaten Belitung",
+  "icons": []
+}
