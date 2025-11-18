@@ -5,17 +5,19 @@ document.getElementById("ambil").onclick = () => {
     nomor++;
     total++;
 
-    document.getElementById("nomor").innerText = nomor;
-    document.getElementById("nomorTerakhir").innerText = nomor;
-    document.getElementById("totalAntrian").innerText = total;
+    document.getElementById("nomor").innerHTML = nomor;
+    document.getElementById("nomorTerakhir").innerHTML = nomor;
+    document.getElementById("totalAntrian").innerHTML = total;
 
-    // Set data ke mode print
+    // Set nomor di struk
     document.getElementById("printNumber").innerText = nomor;
 
+    // Set tanggal dan waktu
     const now = new Date();
     document.getElementById("printDate").innerText =
-        now.toLocaleDateString() + " " + now.toLocaleTimeString();
+        now.toLocaleDateString("id-ID") + " " + now.toLocaleTimeString("id-ID");
 
+    // Print
     window.print();
 };
 
@@ -23,7 +25,7 @@ document.getElementById("reset").onclick = () => {
     nomor = 0;
     total = 0;
 
-    document.getElementById("nomor").innerText = "0";
-    document.getElementById("nomorTerakhir").innerText = "0";
-    document.getElementById("totalAntrian").innerText = "0";
+    document.getElementById("nomor").innerHTML = nomor;
+    document.getElementById("nomorTerakhir").innerHTML = nomor;
+    document.getElementById("totalAntrian").innerHTML = total;
 };
