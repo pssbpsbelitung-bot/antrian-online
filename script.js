@@ -1,51 +1,29 @@
-
 let nomor = 0;
 let total = 0;
 
-const nomorDisplay = document.getElementById('nomor');
-const nomorTerakhir = document.getElementById('nomorTerakhir');
-const totalAntrian = document.getElementById('totalAntrian');
-const ambilBtn = document.getElementById('ambil');
-const resetBtn = document.getElementById('reset');
-
-ambilBtn.addEventListener('click', () => {
+document.getElementById("ambil").onclick = () => {
     nomor++;
     total++;
-    updateDisplay();
-    cetakPDF(nomor);
-});
 
-resetBtn.addEventListener('click', () => {
+    document.getElementById("nomor").innerText = nomor;
+    document.getElementById("nomorTerakhir").innerText = nomor;
+    document.getElementById("totalAntrian").innerText = total;
+
+    // Set data ke mode print
+    document.getElementById("printNumber").innerText = nomor;
+
+    const now = new Date();
+    document.getElementById("printDate").innerText =
+        now.toLocaleDateString() + " " + now.toLocaleTimeString();
+
+    window.print();
+};
+
+document.getElementById("reset").onclick = () => {
     nomor = 0;
     total = 0;
-    updateDisplay();
-});
 
-function updateDisplay() {
-    nomorDisplay.textContent = nomor;
-    nomorTerakhir.textContent = nomor;
-    totalAntrian.textContent = total;
-}
-
-function cetakPDF(nomorAntrian) {
-    const printWindow = window.open('', '', 'width=400,height=400');
-    printWindow.document.write(`
-        <html>
-        <head>
-            <title>Cetak Nomor</title>
-            <style>
-                body { font-family: Arial, sans-serif; text-align: center; }
-                h1 { font-size: 80px; color: #0f172a; }
-                p { font-size: 20px; }
-            </style>
-        </head>
-        <body>
-            <img src="logo-bps.png" alt="Logo BPS" style="width:80px; margin-bottom:20px;">
-            <h1>${nomorAntrian}</h1>
-            <p>Nomor Antrian Anda</p>
-        </body>
-        </html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
-}
+    document.getElementById("nomor").innerText = "0";
+    document.getElementById("nomorTerakhir").innerText = "0";
+    document.getElementById("totalAntrian").innerText = "0";
+};
