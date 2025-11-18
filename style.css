@@ -1,3 +1,4 @@
+/* ========== TAMPILAN LAYAR (NORMAL) ========== */
 
 body {
     background: #0f172a;
@@ -7,14 +8,17 @@ body {
     margin: 0;
     padding: 0;
 }
+
 .container {
     margin-top: 50px;
 }
+
 .nomor {
     font-size: 80px;
     margin: 20px 0;
     color: #38bdf8;
 }
+
 .btn {
     padding: 10px 20px;
     margin: 5px;
@@ -25,6 +29,87 @@ body {
     color: #000;
     cursor: pointer;
 }
+
 .btn.reset {
     background: #f87171;
+}
+
+
+
+/* ========== MODE PRINT — THERMAL PRINTER ========== */
+@media print {
+
+    /* ======= Pilih lebar kertas thermal ======= */
+
+    /* Untuk 58mm */
+    @page {
+        size: 58mm auto;
+        margin: 0;
+    }
+
+    /* Kalau printer 80mm:
+    @page {
+        size: 80mm auto;
+        margin: 0;
+    }
+    */
+
+
+    /* ======= Reset desain ======= */
+
+    body {
+        background: white !important;
+        color: black !important;
+        margin: 0;
+        padding: 5px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .container {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+
+    img {
+        width: 120px;
+        margin: 0 auto 5px auto;
+        display: block;
+    }
+
+    h1 {
+        font-size: 14px;
+        margin: 3px 0 2px 0;
+    }
+
+    /* Tanggal & waktu */
+    #waktu {
+        font-size: 12px;
+        margin: 0 0 5px 0;
+    }
+
+    /* Garis putus-putus */
+    .divider {
+        border-top: 1px dashed black;
+        margin: 8px 0;
+    }
+
+    .nomor {
+        font-size: 55px !important;
+        color: black !important;
+        font-weight: bold;
+        margin: 8px 0;
+    }
+
+    /* tombol tidak dicetak */
+    .btn {
+        display: none !important;
+    }
+
+    /* Teks bawah */
+    p {
+        margin: 2px 0;
+        font-size: 12px;
+    }
 }
