@@ -1,5 +1,4 @@
-/* ========== TAMPILAN LAYAR (NORMAL) ========== */
-
+/* Normal screen style */
 body {
     background: #0f172a;
     color: white;
@@ -34,82 +33,54 @@ body {
     background: #f87171;
 }
 
-
-
-/* ========== MODE PRINT — THERMAL PRINTER ========== */
+/* ================================
+   🖨️ PRINT THERMAL PRINTER STYLE
+   ================================ */
 @media print {
 
-    /* ======= Pilih lebar kertas thermal ======= */
-
-    /* Untuk 58mm */
-    @page {
-        size: 58mm auto;
-        margin: 0;
-    }
-
-    /* Kalau printer 80mm:
-    @page {
-        size: 80mm auto;
-        margin: 0;
-    }
-    */
-
-
-    /* ======= Reset desain ======= */
-
     body {
-        background: white !important;
-        color: black !important;
-        margin: 0;
-        padding: 5px;
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-    }
-
-    .container {
+        background: white;
+        color: black;
         margin: 0;
         padding: 0;
-        width: 100%;
     }
 
-    img {
-        width: 120px;
-        margin: 0 auto 5px auto;
+    .container, body {
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .btn, .reset, #ambil, #reset {
+        display: none !important;
+    }
+
+    /* Logo full width */
+    .print-logo {
+        width: 180px;
+        margin: 0 auto 10px auto;
         display: block;
     }
 
-    h1 {
+    .print-title {
         font-size: 14px;
-        margin: 3px 0 2px 0;
+        margin-top: 8px;
+        font-weight: bold;
     }
 
-    /* Tanggal & waktu */
-    #waktu {
+    .print-number {
+        font-size: 60px;
+        margin: 10px 0;
+        font-weight: bold;
+    }
+
+    .print-date {
         font-size: 12px;
-        margin: 0 0 5px 0;
+        margin-top: 5px;
     }
 
     /* Garis putus-putus */
     .divider {
-        border-top: 1px dashed black;
-        margin: 8px 0;
-    }
-
-    .nomor {
-        font-size: 55px !important;
-        color: black !important;
-        font-weight: bold;
-        margin: 8px 0;
-    }
-
-    /* tombol tidak dicetak */
-    .btn {
-        display: none !important;
-    }
-
-    /* Teks bawah */
-    p {
-        margin: 2px 0;
-        font-size: 12px;
+        border-top: 1px dashed #000;
+        margin: 10px 0;
     }
 }
