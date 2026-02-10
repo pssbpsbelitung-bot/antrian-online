@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>Antrian Kunjungan PST BPS Belitung</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -16,7 +15,6 @@ body{
   padding:24px;
   color:#111827;
 }
-h2{margin-bottom:6px}
 .card{
   background:#fff;
   border-radius:18px;
@@ -81,10 +79,14 @@ footer{
 
 <body>
 
-<h2>🎟️ Antrian Kunjungan PST</h2>
-<p style="color:#6b7280;margin-bottom:20px">
-Sistem Antrian & Statistik Pengunjung PST BPS Kabupaten Belitung
-</p>
+<!-- HEADER + LOGO -->
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+  <img src="logo-bps.png" style="height:60px">
+  <div>
+    <h2 style="margin:0">Antrian Kunjungan PST</h2>
+    <p style="margin:0;color:#6b7280">BPS Kabupaten Belitung</p>
+  </div>
+</div>
 
 <!-- STAT -->
 <div class="grid">
@@ -116,32 +118,26 @@ Sistem Antrian & Statistik Pengunjung PST BPS Kabupaten Belitung
   </div>
 
   <div id="statistikBox" style="display:none;margin-top:16px">
-    <div style="display:flex;gap:10px;margin-bottom:12px">
-      <input type="month" id="filterBulan">
-      <button class="btn-green" onclick="applyFilterBulanan()">Terapkan</button>
-    </div>
-    <canvas id="chartPengunjung" height="110"></canvas>
+    <input type="month" id="filterBulan">
+    <button class="btn-green" onclick="applyFilterBulanan()">Terapkan</button>
+    <canvas id="chartPengunjung" height="120"></canvas>
   </div>
 </div>
 
 <!-- RIWAYAT -->
 <div class="card">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+  <div style="display:flex;justify-content:space-between;align-items:center">
     <h3>📜 Riwayat Kunjungan</h3>
     <div>
-      <button class="btn-red" onclick="resetTampilan()">🔄 Reset Tampilan</button>
-      <button class="btn-red" onclick="resetDatabase()">🗑️ Reset Database</button>
+      <button class="btn-red" onclick="resetTampilan()">Reset Tampilan</button>
+      <button class="btn-red" onclick="resetDatabase()">Reset Database</button>
     </div>
   </div>
 
   <table>
     <thead>
       <tr>
-        <th>No</th>
-        <th>Tanggal</th>
-        <th>Jam</th>
-        <th>Status</th>
-        <th>Aksi</th>
+        <th>No</th><th>Tanggal</th><th>Jam</th><th>Status</th><th>Aksi</th>
       </tr>
     </thead>
     <tbody id="log"></tbody>
@@ -155,148 +151,128 @@ let data = JSON.parse(localStorage.getItem("antrianPST")) || [];
 let startViewDate = localStorage.getItem("startViewDate");
 const today = new Date().toLocaleDateString("id-ID");
 
-/* === AMBIL ANTRIAN (RESET NOMOR HARIAN) === */
+/* AMBIL ANTRIAN */
 function ambilAntrian(){
-  const nomorHariIni = data.filter(d => d.tgl === today).length + 1;
-
+  const no = data.filter(d=>d.tgl===today).length + 1;
   const tiket = {
-    no: nomorHariIni,
-    tgl: today,
-    jam: new Date().toLocaleTimeString("id-ID"),
-    status: "Menunggu"
+    no:no,
+    tgl:today,
+    jam:new Date().toLocaleTimeString("id-ID"),
+    status:"Menunggu"
   };
-
   data.push(tiket);
   localStorage.setItem("antrianPST", JSON.stringify(data));
   render();
   cetakTiket(tiket);
 }
 
-/* === SELESAI === */
+/* SELESAI */
 function selesaikan(i){
-  if(!confirm("Tandai antrian sebagai SELESAI?")) return;
-  data[i].status = "Selesai";
+  if(!confirm("Tandai antrian sebagai selesai?")) return;
+  data[i].status="Selesai";
   localStorage.setItem("antrianPST", JSON.stringify(data));
   render();
 }
 
-/* === RESET === */
+/* RESET TAMPILAN */
 function resetTampilan(){
-  if(!confirm("Reset tampilan? Data lama tetap disimpan.")) return;
   startViewDate = today;
   localStorage.setItem("startViewDate", startViewDate);
   render();
 }
 
+/* RESET DATABASE (PASSWORD) */
 function resetDatabase(){
-  if(!confirm("HAPUS SEMUA DATA antrian?")) return;
+  const pwd = prompt("Masukkan password reset database:");
+  if(pwd === null) return;
+  if(pwd !== "resetantri"){
+    alert("❌ Password salah");
+    return;
+  }
+  if(!confirm("⚠️ Yakin hapus SEMUA data?")) return;
+
   localStorage.clear();
-  data = [];
+  data=[];
   if(window.chart) window.chart.destroy();
+  alert("✅ Database berhasil direset");
   render();
 }
 
-/* === RENDER TABLE === */
+/* RENDER */
 function render(){
-  const log = document.getElementById("log");
-  log.innerHTML = "";
-
-  let wait=0, done=0;
+  const log=document.getElementById("log");
+  log.innerHTML="";
+  let wait=0,done=0;
 
   data.forEach((d,i)=>{
     if(startViewDate){
-      const t = new Date(d.tgl.split("/").reverse().join("-"));
-      const s = new Date(startViewDate.split("/").reverse().join("-"));
-      if(t < s) return;
+      const t=new Date(d.tgl.split("/").reverse().join("-"));
+      const s=new Date(startViewDate.split("/").reverse().join("-"));
+      if(t<s) return;
     }
-
     if(d.status==="Menunggu") wait++;
     if(d.status==="Selesai") done++;
 
-    log.innerHTML += `
+    log.innerHTML+=`
     <tr>
       <td>${d.no}</td>
       <td>${d.tgl}</td>
       <td>${d.jam}</td>
       <td><span class="badge ${d.status==="Menunggu"?"wait":"done"}">${d.status}</span></td>
       <td>${d.status==="Menunggu"
-        ? `<button class="btn-small btn-green" onclick="selesaikan(${i})">✔ Selesai</button>`
+        ? `<button class="btn-small btn-green" onclick="selesaikan(${i})">Selesai</button>`
         : "-"}</td>
     </tr>`;
   });
 
-  document.getElementById("total").innerText =
-    data.filter(d=>d.tgl===today).length;
-  document.getElementById("waiting").innerText = wait;
-  document.getElementById("done").innerText = done;
+  document.getElementById("total").innerText=data.filter(d=>d.tgl===today).length;
+  document.getElementById("waiting").innerText=wait;
+  document.getElementById("done").innerText=done;
 }
 
-/* === STATISTIK BULANAN === */
+/* STATISTIK */
 function toggleStat(){
-  const box = document.getElementById("statistikBox");
-  const btn = event.target;
-  box.style.display = box.style.display==="none" ? "block" : "none";
-  btn.innerText = box.style.display==="block" ? "Sembunyikan" : "Tampilkan";
+  const box=statistikBox;
+  box.style.display=box.style.display==="none"?"block":"none";
 }
 
 function applyFilterBulanan(){
-  const val = filterBulan.value;
-  if(!val){ alert("Pilih bulan dan tahun"); return; }
+  const val=filterBulan.value;
+  if(!val) return;
+  const [y,m]=val.split("-").map(Number);
+  const days=new Date(y,m,0).getDate();
+  const perHari={};
+  for(let i=1;i<=days;i++) perHari[i]=0;
 
-  const [year, month] = val.split("-").map(Number);
-  const days = new Date(year, month, 0).getDate();
-
-  const perHari = {};
-  for(let d=1; d<=days; d++) perHari[d]=0;
-
-  data.forEach(it=>{
-    const [dd,mm,yy] = it.tgl.split("/").map(Number);
-    if(mm===month && yy===year) perHari[dd]++;
+  data.forEach(d=>{
+    const [dd,mm,yy]=d.tgl.split("/").map(Number);
+    if(mm===m && yy===y) perHari[dd]++;
   });
 
-  renderChartBulanan(perHari, month, year);
-}
-
-function renderChartBulanan(perHari, month, year){
   if(window.chart) window.chart.destroy();
-
-  window.chart = new Chart(chartPengunjung,{
+  window.chart=new Chart(chartPengunjung,{
     type:"bar",
-    data:{
-      labels:Object.keys(perHari),
-      datasets:[{
-        data:Object.values(perHari),
-        backgroundColor:"#1d4ed8"
-      }]
-    },
-    options:{
-      scales:{
-        x:{title:{display:true,text:"Tanggal"}},
-        y:{beginAtZero:true,title:{display:true,text:"Jumlah Pengunjung"},ticks:{precision:0}}
-      },
-      plugins:{legend:{display:false}}
-    }
+    data:{labels:Object.keys(perHari),
+      datasets:[{data:Object.values(perHari),backgroundColor:"#1d4ed8"}]},
+    options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}
   });
 }
 
-/* === CETAK TIKET MINI 58mm === */
+/* CETAK TIKET MINI */
 function cetakTiket(t){
-  const w = window.open("","","width=240,height=400");
+  const w=window.open("","","width=240,height=400");
   w.document.write(`
   <style>
-    @page{margin:0;size:58mm auto}
-    body{margin:0;padding:8px;font-family:Arial;text-align:center;font-size:12px}
-    h1{font-size:48px;margin:6px 0}
-    hr{border:none;border-top:1px dashed #000;margin:6px 0}
+  @page{margin:0;size:58mm auto}
+  body{text-align:center;font-family:Arial;font-size:12px;margin:0;padding:8px}
+  h1{font-size:48px;margin:6px 0}
   </style>
   <body onload="window.print()">
+    <img src="logo-bps.png" style="height:32px"><br>
     <strong>PST BPS Kab. Belitung</strong>
     <div>Nomor Antrian</div>
     <h1>${t.no}</h1>
-    <hr>
     <div>${t.tgl}<br>${t.jam}</div>
-    <hr>
-    <div>Mohon menunggu<br>Terima kasih</div>
   </body>`);
   w.document.close();
 }
